@@ -1,13 +1,8 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-/**
- * Handles user logout by clearing authentication cookies
- * @returns JSON response indicating logout status
- */
 export async function POST() {
   try {
-    // Clear auth cookie
     const cookieStore = await cookies();
     cookieStore.delete("auth-token");
 

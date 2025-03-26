@@ -11,10 +11,8 @@ import { getTokenData } from "@/lib/auth";
  */
 export async function GET(req: NextRequest) {
   try {
-    // Get user data from token
     const userData = await getTokenData(req);
 
-    // Check for valid user data
     if (!userData || !userData.id) {
       return NextResponse.json(
         { success: false, message: "Unauthorized" },
@@ -22,32 +20,21 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    try {
-      // Connect to database
-      await dbConnect();
+    await dbConnect();
+    const user = await User.findById(userData.id).select("-password");
 
-      // Find user by ID, excluding the password field
-      const user = await User.findById(userData.id).select("-password");
-
-      if (!user) {
-        return NextResponse.json(
-          { success: false, message: "User not found" },
-          { status: 404 }
-        );
-      }
-
-      return NextResponse.json({ success: true, user }, { status: 200 });
-    } catch (dbError) {
-      console.error("Database error in /api/auth/me:", dbError);
+    if (!user) {
       return NextResponse.json(
-        { success: false, message: "Database error occurred" },
-        { status: 500 }
+        { success: false, message: "User not found" },
+        { status: 404 }
       );
     }
+
+    return NextResponse.json({ success: true, user }, { status: 200 });
   } catch (error) {
     console.error("Get current user error:", error);
     return NextResponse.json(
-      { success: false, message: "Something went wrong" },
+      { success: false, message: "Failed to fetch user data" },
       { status: 500 }
     );
   }

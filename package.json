@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@auth/core": "^0.38.0",
+    "@heroicons/react": "^2.2.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
+    "heroicons": "^2.2.0",
     "jose": "^6.0.10",
     "mongoose": "^8.12.2",
     "next": "15.2.3",
